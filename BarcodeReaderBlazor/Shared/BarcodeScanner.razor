@@ -1,0 +1,26 @@
+﻿@using Microsoft.JSInterop
+@inject IJSRuntime js;
+
+<p>Press the button to scan barcodes.</p>
+<button class="btn btn-primary" @onclick="startScan">Scan Barcodes</button>
+
+@if (@result != "")
+{
+    <p>Result: @result</p>
+}
+
+@code {
+    String result = "";
+
+    private void startScan()
+    {
+        js.InvokeVoidAsync("startScan",DotNetObjectReference.Create(this));
+    }
+
+    [JSInvokable]
+    public void onUniqueRead(String text)
+    {
+        result = text;
+        StateHasChanged();
+    }
+}
